@@ -1,11 +1,11 @@
-import { Label } from '@radix-ui/react-label'
 import React from 'react'
 import { Input } from '../ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@radix-ui/react-select';
 import { Textarea } from '../ui/textarea';
 import { Button } from '../ui/button';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
+import { Label } from '../ui/label';
 
-const form = ({formControls,formData,setFormData,onSubmit,buttonText}) => {
+const Form = ({formControls,formData,setFormData,onSubmit,buttonText}) => {
     const renderInputs=(getControlItem)=>{
 
         const value=formData[getControlItem.name];
@@ -32,7 +32,7 @@ const form = ({formControls,formData,setFormData,onSubmit,buttonText}) => {
                 })}
                  value={value}>
                     <SelectTrigger className='w-full'>
-                        <SelectValue placeholder={getControlItem.placeholder}/>
+                        <SelectValue placeholder={getControlItem.label}/>
                     </SelectTrigger>
                     <SelectContent>
                         {
@@ -69,7 +69,7 @@ const form = ({formControls,formData,setFormData,onSubmit,buttonText}) => {
                 break;
         }
         return element;
-    }
+    }     
   return (
     <form onSubmit={onSubmit}>
         <div className='flex flex-col gap-3'>
@@ -88,4 +88,4 @@ const form = ({formControls,formData,setFormData,onSubmit,buttonText}) => {
   )
 }
 
-export default form
+export default Form
