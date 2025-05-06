@@ -70,7 +70,7 @@ export const loginUser = async(req,res)=>{
             id:existingUser._id , 
             role:existingUser.role,
             email:existingUser.email,
-        },'CLIENT_SECRET_KEY',{expiresIn : '60m'})
+        },'CLIENT_SECRET_KEY',{expiresIn : '60d'})
         // console.log('loginUser',token);
         res.cookie('token',token,{httpOnly:true,secure:false}).json({
             success:true,

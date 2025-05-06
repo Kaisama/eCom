@@ -19,7 +19,7 @@ const AuthLogin = () => {
     e.preventDefault();
     dispatch(loginUser(formData)).then((data)=>{
       console.log("Login user data",data);
-      if(data?.payload.success){
+      if(data?.payload?.success){
         toast({
           title:'Success',
           description:data.payload.message,

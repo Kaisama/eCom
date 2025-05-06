@@ -1,10 +1,12 @@
-import React, { useRef } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { Label } from '../ui/label'
 import { Input } from '../ui/input'
 import { FileIcon, UploadCloudIcon, XIcon } from 'lucide-react';
 import { Button } from '../ui/button';
+import axios from 'axios';
+import { Skeleton } from '../ui/skeleton';
 
-const ImageUpload = ({imageFile,setImageFile,uploadedImageUrl,setUploadedImageUrl}) => {
+const ImageUpload = ({imageFile,setImageFile,uploadedImageUrl,setUploadedImageUrl,imageLoading, setImageLoading}) => {
 
     const inputRef = useRef(null);
 
@@ -30,6 +32,37 @@ const ImageUpload = ({imageFile,setImageFile,uploadedImageUrl,setUploadedImageUr
             inputRef.current.value = null;
         }
     }
+    const uploadedImageToCloudinary = async () => {
+        setImageLoading(true);
+        const data = new FormData();
+        data.append('my_file', imageFile);
+    
+        try {
+            const response = await axios.post('http://localhost:5000/api/admin/products/upload-image', data);
+            console.log("cloudinary url", response);
+    
+            if (response?.data?.success) {
+                setUploadedImageUrl(response.data.url.url);
+                console.log("setUploadedImageUrl",uploadedImageUrl);
+            } else {
+                console.error("Upload failed:", response?.data?.message || "Unknown error");
+            }
+        } catch (error) {
+            console.error("Upload error:", error);
+        } finally {
+            setImageLoading(false);
+        }
+    };
+    
+
+
+    useEffect(()=>{
+        if(imageFile !== null){
+            uploadedImageToCloudinary()
+        }
+    },[imageFile])
+
+
 
   return (
     <div className='w-full max-w-md mx-auto mt-4'>
@@ -45,10 +78,13 @@ const ImageUpload = ({imageFile,setImageFile,uploadedImageUrl,setUploadedImageUr
                     <Label htmlFor='image-upload'
                     className='flex flex-col items-center justify-center cursor-pointer h-32 '
                     >
+                        
                         <UploadCloudIcon  className='w-10 h-10 text-muted-foreground mb-2'/>
                         <span>Drag and drop or click to upload a image</span>
                     </Label>
                   : (
+                        imageLoading ? 
+                            <Skeleton className='h-10'/>:
                     <div className='flex items-center justify-between'>
                         <div className='flex items-center'>
                             <FileIcon className='w-8 text-primary mr-2 h-8'/>
